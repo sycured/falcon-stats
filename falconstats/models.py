@@ -14,13 +14,13 @@ def get_or_create(session, model, **kwargs):
     instance = session.query(model).filter_by(**kwargs).first()
     if instance:
         logger.debug("%s instance found in the DB", model.__name__)
-        return instance
     else:
         logger.debug("%s instance not found - creating it", model.__name__)
         instance = model(**kwargs)
         session.add(instance)
         session.commit()
-        return instance
+
+    return instance
 
 
 class UserAgent(Base):
