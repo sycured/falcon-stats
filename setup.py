@@ -1,5 +1,6 @@
 """Credits https://pythonhosted.org/an_example_pypi_project/setuptools.html"""
 import os
+
 from setuptools import setup
 
 

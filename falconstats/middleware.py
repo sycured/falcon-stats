@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 from datetime import datetime
 
 from sqlalchemy import create_engine
@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from .models import (IP, URI, Base, ContentType, Method, ReqRespInfo, Status,
                      UserAgent, get_or_create)
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 REQ_RESP_FORMAT = """
 -----
 REQUEST-RESPONSE FROM {date}
