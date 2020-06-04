@@ -41,7 +41,8 @@ fsm = FalconStatsMiddleware(
     db_engine="mysql+pymysql",
     db_user="root",
     db_pass="my-secret-pw",
-    db_addr="localhost:3306",
+    db_addr="localhost",
+    db_port="3306",
     db_name="stats"
 )
 app = falcon.API(middleware=[fsm])
