@@ -38,10 +38,11 @@ In your main falcon file import the `FalconStatsMiddleware` and add it to the mi
 from falconstats import FalconStatsMiddleware
 ...
 fsm = FalconStatsMiddleware(
-	db_user="root",
-	db_pass="my-secret-pw",
-	db_addr="localhost:3306",
-	db_name="stats"
+    db_engine="mysql+pymysql",
+    db_user="root",
+    db_pass="my-secret-pw",
+    db_addr="localhost:3306",
+    db_name="stats"
 )
 app = falcon.API(middleware=[fsm])
 ```

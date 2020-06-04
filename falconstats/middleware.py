@@ -28,13 +28,8 @@ class FalconStatsMiddleware(object):
     def __init__(self, debug=False, **kwargs):
         if not debug:
             logger.debug("Using MySQL connection at %s", kwargs["db_addr"])
-            DB = "mysql+pymysql://{}:{}@{}/{}".format(
-                kwargs["db_user"],
-                kwargs["db_pass"],
-                kwargs["db_addr"],
-                kwargs["db_name"]
-            )
-            engine = create_engine(DB, pool_pre_ping=True)
+            db = f'{kwargs["dbengine"]}://{kwargs["db_user"]}:{kwargs["db_pass"]}@{kwargs["db_addr"]}:{kwargs["db_port"]}/{kwargs["db_name"]}'
+            engine = create_engine(db, pool_pre_ping=True)
             self.Session = sessionmaker(bind=engine)
         else:
             logger.debug("Using debug session")

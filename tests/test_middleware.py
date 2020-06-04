@@ -17,8 +17,8 @@ test_resource = testing.SimpleTestResource(
 
 class TestStatsMiddleware(testing.TestCase):
 
-    def setUp(self):
-        super(TestStatsMiddleware, self).setUp()
+    def setup(self):
+        super(TestStatsMiddleware, self).setup()
         fsm = FalconStatsMiddleware(
             debug=True,
             session=self.Session,
@@ -28,7 +28,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.app.add_route("/stats", test_resource)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         cls.engine = create_engine("sqlite:///:memory:")
         # make sure object relations don't expire after setup session is closed
         cls.Session = sessionmaker(bind=cls.engine, expire_on_commit=False)
@@ -47,7 +47,7 @@ class TestStatsMiddleware(testing.TestCase):
             rri.useragent.text,
             "curl/7.24.0 (x86_64-apple-darwin12.0)"
         )
-        self.assertEqual(rri.uri.text, "http://falconframework.org" + endpoint)
+        self.assertEqual(rri.uri.text, "https://falconframework.org" + endpoint)
 
     def assertContentIsNone(self, rri):
         self.assertIsNone(rri.contentlength)
