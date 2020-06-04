@@ -50,4 +50,4 @@ app = falcon.API(middleware=[fsm])
 This will connect to the given MySQL database and start to add request-response data. For now only MySQL is supported - *PRs welcome*!
 
 ## Compatibility
-The middleware is used with Python 3.5 and 3.6. I don't plan on supporting Python 2.7 but it still might work.
+The middleware is tested with Python 3.6, 3.7 and 3.8. I don't plan on supporting older version.
