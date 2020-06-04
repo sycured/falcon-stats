@@ -9,16 +9,20 @@ from sqlalchemy.orm import sessionmaker
 
 logging.basicConfig(level=logging.DEBUG)
 # Illegal methods are PUT, HEAD, PATCH, DELETE
+
+const_405 = "405 Method Not Allowed"
+const_418 = "418 I'm a teapot"
+
 test_resource = testing.SimpleTestResource(
-    status="418 I'm a teapot",
+    status=const_418,
     json={"message": "test"}
 )
 
 
 class TestStatsMiddleware(testing.TestCase):
 
-    def setup(self):
-        super(TestStatsMiddleware, self).setup()
+    def setUp(self):
+        super(TestStatsMiddleware, self).setUp()
         fsm = FalconStatsMiddleware(
             debug=True,
             session=self.Session,
@@ -28,7 +32,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.app.add_route("/stats", test_resource)
 
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls):
         cls.engine = create_engine("sqlite:///:memory:")
         # make sure object relations don't expire after setup session is closed
         cls.Session = sessionmaker(bind=cls.engine, expire_on_commit=False)
@@ -47,7 +51,7 @@ class TestStatsMiddleware(testing.TestCase):
             rri.useragent.text,
             "curl/7.24.0 (x86_64-apple-darwin12.0)"
         )
-        self.assertEqual(rri.uri.text, "https://falconframework.org" + endpoint)
+        self.assertEqual(rri.uri.text, "http://falconframework.org" + endpoint)
 
     def assertContentIsNone(self, rri):
         self.assertIsNone(rri.contentlength)
@@ -57,7 +61,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.simulate_get("/stats")
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "GET", "418 I'm a teapot")
+        self.check_rri(rri, "GET", const_418)
         self.assertIsNone(rri.contentlength)
         self.assertIsNone(rri.content_type.text)
         session.close()
@@ -70,7 +74,7 @@ class TestStatsMiddleware(testing.TestCase):
         )
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "POST", "418 I'm a teapot")
+        self.check_rri(rri, "POST", const_418)
         self.assertEqual(rri.contentlength, 15)
         self.assertEqual(rri.content_type.text, "text/plain")
         session.close()
@@ -79,7 +83,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.simulate_put("/stats")
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "PUT", "405 Method Not Allowed")
+        self.check_rri(rri, "PUT", const_405)
         self.assertContentIsNone(rri)
         session.close()
 
@@ -87,7 +91,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.simulate_head("/stats")
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "HEAD", "405 Method Not Allowed")
+        self.check_rri(rri, "HEAD", const_405)
         self.assertContentIsNone(rri)
         session.close()
 
@@ -103,7 +107,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.simulate_patch("/stats")
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "PATCH", "405 Method Not Allowed")
+        self.check_rri(rri, "PATCH", const_405)
         self.assertContentIsNone(rri)
         session.close()
 
@@ -111,7 +115,7 @@ class TestStatsMiddleware(testing.TestCase):
         self.simulate_delete("/stats")
         session = self.Session()
         rri = self.get_latest_rri(session)
-        self.check_rri(rri, "DELETE", "405 Method Not Allowed")
+        self.check_rri(rri, "DELETE", const_405)
         self.assertContentIsNone(rri)
         session.close()
 
