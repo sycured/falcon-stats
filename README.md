@@ -26,10 +26,10 @@ Note that logging and database access add overhead to the processing time. Furth
 ... is as easy as
 
 ```
-pip install falcon-stats
+pip install git+https://github.com/sycured/falcon-stats.git
 ```
 
-Installation assumes you have the packages found in *requirements.txt* installed. Please note the development build of SQLAlchemy that is pulled from the official git repository.
+Installation assumes you have the packages found in *requirements.txt* installed.
 
 ## Usage
 In your main falcon file import the `FalconStatsMiddleware` and add it to the middleware list of your API instance. That's it.
@@ -47,8 +47,6 @@ fsm = FalconStatsMiddleware(
 )
 app = falcon.API(middleware=[fsm])
 ```
-
-This will connect to the given MySQL database and start to add request-response data. For now only MySQL is supported - *PRs welcome*!
 
 ## Compatibility
 The middleware is tested with Python 3.6, 3.7 and 3.8. I don't plan on supporting older version.
