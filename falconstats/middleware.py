@@ -39,10 +39,12 @@ class FalconStatsMiddleware(object):
             self.Session = kwargs["session"]
         Base.metadata.create_all(bind=engine)
 
+    # noinspection PyUnusedLocal,PyMethodMayBeStatic
     def process_request(self, req, resp):
         logger.debug("Start request-response time measurement")
         req.context["start_time"] = datetime.now()
 
+    # noinspection PyUnusedLocal
     def process_response(self, req, resp, resource, req_succeeded):
         logger.debug("Stop request-response time measurement")
         now = datetime.now()
